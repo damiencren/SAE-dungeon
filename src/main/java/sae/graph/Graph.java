@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Graph {
 
-    ArrayList<Node> nodes;
+    private ArrayList<Node> nodes;
 
     public Graph() {
         super();
@@ -14,8 +14,8 @@ public class Graph {
         nodes.add(node);
     }
 
-    addEdge(Node node1, Node node2) {
-        node1.addNeighbor(node2);
-        node2.addNeighbor(node1);
+    public void addEdge(Node node1, Node node2) {
+        node1.addNeighbour(node2);
+        node2.addNeighbour(node1);
     }
 }

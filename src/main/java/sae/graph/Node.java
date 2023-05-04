@@ -31,7 +31,7 @@ public class Node {
         return neighbors;
     }
 
-    public void addNeigbour(Node node) {
+    public void addNeighbour(Node node) {
         neighbors.add(node);
     }
 
