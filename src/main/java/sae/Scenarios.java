@@ -10,7 +10,7 @@ import sae.graph.Node;
 import sae.solver.Solver;
 import sae.solver.SolverWithAstar;
 import sae.solver.SolverWithBFS;
-import sae.transform.DungeonToGraph;
+import sae.transform.Dungeon2Graph;
 
 public class Scenarios {
 
