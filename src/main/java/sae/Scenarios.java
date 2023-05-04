@@ -4,12 +4,13 @@ import sae.dungeon.Dungeon;
 import sae.dungeon.DungeonBuilder;
 import sae.dungeon.DungeonSoluce;
 import sae.dungeon.Room;
+
 import sae.graph.GraphSoluce;
 import sae.graph.Node;
 import sae.solver.Solver;
 import sae.solver.SolverWithAstar;
 import sae.solver.SolverWithBFS;
-import sae.transform.Dungeon2Graph;
+import sae.transform.DungeonToGraph;
 
 public class Scenarios {
 
