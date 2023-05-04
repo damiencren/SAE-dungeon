@@ -28,16 +28,15 @@ public class Node {
     }
 
     public Set<Node> neighbors() { //TODO
-        Set<Node> var = null;
-        return var;
+        return neighbors;
     }
 
     public void addNeigbour(Node node) {
-        //TODO
+        neighbors.add(node);
     }
 
     @Override
-    public String toString() { //TODO
+    public String toString() {
         return super.toString();
     }
 }
