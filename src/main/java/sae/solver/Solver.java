@@ -1,4 +1,10 @@
 package sae.solver;
 
-public class Solver {
+import sae.graph.Graph;
+
+public interface Solver {
+
+    public void solve();
+
+    public Graph
 }
