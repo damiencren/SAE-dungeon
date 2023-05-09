@@ -1,6 +1,5 @@
 package sae.solver;
 
-import sae.graph.Graph;
 import sae.graph.GraphSoluce;
 import sae.graph.Node;
 
@@ -15,6 +14,7 @@ public class SolverWithAstar implements Solver {
     private Node end;
 
     public SolverWithAstar(Node start, Node end) {
+        super();
         this.start = start;
         this.end = end;
     }
@@ -22,7 +22,6 @@ public class SolverWithAstar implements Solver {
     @Override
     public void resolve() {
         steps = 0;
-
         Queue<Node> closedQueue = new LinkedList<>();
         PriorityQueue<Node> openQueue = new PriorityQueue<>(new Comparator<Node>() {
             @Override
@@ -32,35 +31,43 @@ public class SolverWithAstar implements Solver {
                 return dx - dy;
             }
         });
+        Map<Node, Integer> cost = new HashMap<Node, Integer>();
+        Map<Node, Integer> heuristic = new HashMap<Node, Integer>();
 
-        openQueue.add(graph.getStartNode());
+        openQueue.add(start);
 
         while (!openQueue.isEmpty()) {
-            Node currentNode = openQueue.poll();
-            if (currentNode.equals(graph.getEndNode())) {
-                soluce = new GraphSoluce();
-                soluce.addNode(currentNode);
-                while (currentNode.neighbors() != null) {
-                    soluce.addNode(currentNode.getParent());
-                    currentNode = currentNode.getParent();
-                }
+            Node u = openQueue.poll();
+            if (u.getCoord().getX() == end.getCoord().getX() && u.getCoord().getY() == end.getCoord().getY()) {
+                reconstructPath(openQueue);
                 break;
             }
-            for (Node node : currentNode.neighbors()) {
-                if (!closedQueue.contains(node)) {
-                    node.setParent(currentNode);
-                    openQueue.add(node);
+            for (Node v : u.neighbors()) {
+                heuristic.put(v, (int) distanceManhattan(v, end));
+                cost.put(v, (int) distanceManhattan(v, start));
+                if (!closedQueue.contains(v) || !(openQueue.contains(v) && cost.get(v) < cost.get(u))) {
+                    cost.put(v, cost.get(u) + 1);
+                    heuristic.put(v, cost.get(v) + heuristic.get(v));
+                    openQueue.add(v);
                 }
             }
-            closedQueue.add(currentNode);
+            closedQueue.add(u);
         }
+        steps++;
+    }
 
-        //stepsCount++;
+    private double distanceManhattan(Node currentNode, Node end) {
+        double x = Math.abs(end.getCoord().getX()) - Math.abs(currentNode.getCoord().getX());
+        double y = Math.abs(end.getCoord().getY()) - Math.abs(currentNode.getCoord().getY());
+        return Math.abs(x) - Math.abs(y);
+    }
+    private void reconstructPath(PriorityQueue<Node> openQueue) {
+        soluce.addNode(openQueue.poll());
     }
 
     @Override
     public GraphSoluce getSoluce() {
-        return soluce;
+        return this.soluce;
     }
 
     @Override
