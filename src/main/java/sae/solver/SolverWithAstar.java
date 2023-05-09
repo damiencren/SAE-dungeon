@@ -8,66 +8,54 @@ import java.util.*;
 
 public class SolverWithAstar implements Solver {
 
-    private int stepsCount;
+    private int steps;
     private GraphSoluce soluce;
-    private Graph graph;
 
-    SolverWithAstar(Graph graph) {
-        this.graph = graph;
+    private Node start;
+    private Node end;
+
+    SolverWithAstar(Node start, Node end) {
+        this.start = start;
+        this.end = end;
     }
 
     @Override
     public void resolve() {
-        stepsCount = 0;
+        steps = 0;
 
         Queue<Node> closedQueue = new LinkedList<>();
-        PriorityQueue<Graph> openQueue = new PriorityQueue<>(new Comparator<Node>() {
+        PriorityQueue<Node> openQueue = new PriorityQueue<>(new Comparator<Node>() {
             @Override
-            public int compare (Node node1, Node node2) {
+            public int compare(Node node1, Node node2) {
                 int dx = Math.abs(node1.getCoord().getX() - node1.getCoord().getY());
-                int dy = Math.abs(node1.getCoord().getX()  - coord.getY());
-                return dx-dy;
+                int dy = Math.abs(node2.getCoord().getX() - node2.getCoord().getY());
+                return dx - dy;
             }
         });
 
-        Map<Node, Node> cameFrom = new HashMap<>();
         openQueue.add(graph.getStartNode());
 
         while (!openQueue.isEmpty()) {
             Node currentNode = openQueue.poll();
             if (currentNode.equals(graph.getEndNode())) {
-                reconstructPath(cameFrom, currentNode);
+                soluce = new GraphSoluce();
+                soluce.addNode(currentNode);
+                while (currentNode.neighbors() != null) {
+                    soluce.addNode(currentNode.getParent());
+                    currentNode = currentNode.getParent();
+                }
                 break;
-            } else {
-                closedQueue.add(currentNode);
-                for (Node neighbor : currentNode.neighbors()) {
-                    if (closedQueue.contains(neighbor))
-                        continue;
-
-                    int tentativeGScore = gScore.get(currentNode) + currentNode.getEdgeWeight(neighbor);
-                    if (!openQueue.contains(neighbor) || tentativeGScore < gScore.get(neighbor)) {
-                        cameFrom.put(neighbor, currentNode);
-                        gScore.put(neighbor, tentativeGScore);
-                        fScore.put(neighbor, tentativeGScore + neighbor.getHeuristic());
-
-                        if (!openQueue.contains(neighbor))
-                            openQueue.add(neighbor);
-                    }
+            }
+            for (Node node : currentNode.neighbors()) {
+                if (!closedQueue.contains(node)) {
+                    node.setParent(currentNode);
+                    openQueue.add(node);
                 }
             }
+            closedQueue.add(currentNode);
         }
 
-        stepsCount = closedQueue.size();
-    }
-
-    private void reconstructPath(Map<Node, Node> cameFrom, Node currentNode) {
-        LinkedList<Node> path = new LinkedList<>();
-        path.addFirst(currentNode);
-        while (cameFrom.containsKey(currentNode)) {
-            currentNode = cameFrom.get(currentNode);
-            path.addFirst(currentNode);
-        }
-        soluce = new GraphSoluce(path);
+        //stepsCount++;
     }
 
     @Override
@@ -77,6 +65,6 @@ public class SolverWithAstar implements Solver {
 
     @Override
     public int getSteps() {
-        return stepsCount;
+        return steps;
     }
 }
