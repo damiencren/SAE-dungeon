@@ -14,7 +14,7 @@ public class SolverWithAstar implements Solver {
     private Node start;
     private Node end;
 
-    SolverWithAstar(Node start, Node end) {
+    public SolverWithAstar(Node start, Node end) {
         this.start = start;
         this.end = end;
     }
