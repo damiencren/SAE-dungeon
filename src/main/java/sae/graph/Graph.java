@@ -1,12 +1,14 @@
 package sae.graph;
 
+import sae.dungeon.Room;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Graph {
 
     private ArrayList<Node> nodes;
-    private Node startNode;
-    private Node endNode;
+
 
     public Graph() {
         super();
@@ -21,21 +23,6 @@ public class Graph {
         node2.addNeighbour(node1);
     }
 
-    public void setStartNode(Node node) {
-        this.startNode = node;
-    }
-
-    public void setEndNode(Node node) {
-        this.endNode = node;
-    }
-
-    public Node getStartNode() {
-        return startNode;
-    }
-
-    public Node getEndNode() {
-        return endNode;
-    }
 
     public Node getNodeByName(String name) {
             for (Node node : nodes) {
