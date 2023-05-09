@@ -7,6 +7,7 @@ public class GraphSoluce {
 
     public GraphSoluce(List<Node> soluce) {
         this.soluce = soluce;
+    public GraphSoluce() {
     }
 
     public void addNode(Node node) {

@@ -29,6 +29,14 @@ public class Graph {
         this.endNode = node;
     }
 
+    public Node getStartNode() {
+        return startNode;
+    }
+
+    public Node getEndNode() {
+        return endNode;
+    }
+
     public Node getNodeByName(String name) {
             for (Node node : nodes) {
                 if (node.getName().equals(name)) {
