@@ -1,11 +1,12 @@
 package sae.solver;
 
+import sae.graph.Graph;
 import sae.graph.GraphSoluce;
 
 public class SolverWithBFS implements Solver{
     @Override
     public void resolve() {
-        
+
     }
 
     @Override

@@ -1,13 +1,13 @@
 package sae.graph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GraphSoluce {
     private List<Node> soluce;
 
-    public GraphSoluce(List<Node> soluce) {
-        this.soluce = soluce;
     public GraphSoluce() {
+        this.soluce = new ArrayList<>();
     }
 
     public void addNode(Node node) {
