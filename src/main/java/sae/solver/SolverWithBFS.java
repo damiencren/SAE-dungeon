@@ -32,7 +32,6 @@ public class SolverWithBFS implements Solver {
                     marques.add(v);
                     queue.add(v);
                     if (v.equals(end)) {
-                        getSoluce();
                         soluce = new GraphSoluce();
                         Node node = end;
                         if (pred.containsKey(node)) {
