@@ -9,12 +9,10 @@ public class SolverWithAstar implements Solver {
 
     private int steps;
     private GraphSoluce soluce;
-
     private Node start;
     private Node end;
 
     public SolverWithAstar(Node start, Node end) {
-        super();
         this.start = start;
         this.end = end;
         this.soluce = new GraphSoluce();
@@ -23,59 +21,70 @@ public class SolverWithAstar implements Solver {
     @Override
     public void resolve() {
         Map<Node, Double> gValues = new HashMap<>();
+        Map<Node, Double> fValues = new HashMap<>();
 
         Comparator<Node> nodeComparator = (s1, s2) -> {
-            double deltaX = s1.getCoord().getX() - end.getCoord().getX();
-            double deltaY = s1.getCoord().getY() - end.getCoord().getY();
-            double f1 = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + gValues.getOrDefault(s1, Double.POSITIVE_INFINITY);
-            deltaX = s2.getCoord().getX() - end.getCoord().getX();
-                deltaY = s2.getCoord().getY() - end.getCoord().getY();
-            double f2 = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + gValues.getOrDefault(s2, Double.POSITIVE_INFINITY);
+            double f1 = fValues.getOrDefault(s1, Double.POSITIVE_INFINITY);
+            double f2 = fValues.getOrDefault(s2, Double.POSITIVE_INFINITY);
             return Double.compare(f1, f2);
         };
 
         PriorityQueue<Node> openList = new PriorityQueue<>(nodeComparator);
-        Set<Node> closeList = new HashSet<>();
-        Map<Node, Node> pred = new HashMap<>();
+        Set<Node> closedSet = new HashSet<>();
+        Map<Node, Node> predecessors = new HashMap<>();
 
         this.steps = 0;
-        gValues.put(start, (double) 0);
-        openList.add(end);
+        gValues.put(start, 0.0);
+        fValues.put(start, calculateHeuristic(start));
+
+        openList.add(start);
 
         while (!openList.isEmpty()) {
-            Node Node = openList.poll();
-            if (Node.equals(end)){
+            Node currentNode = openList.poll();
+            if (currentNode.equals(end)) {
+                reconstructPath(predecessors);
                 break;
             }
-            for (Node neighbor : Node.neighbors()) {
-                this.steps++;
-                if (!closeList.contains(neighbor)) {
-                    double deltaX = Node.getCoord().getX() - neighbor.getCoord().getX();
-                    double deltaY = Node.getCoord().getY() - neighbor.getCoord().getY();
-                    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    double tentativeG = gValues.get(Node) + distance;
+            closedSet.add(currentNode);
 
-                    if (!openList.contains(neighbor) || tentativeG < gValues.get(neighbor)) {
-                        gValues.put(neighbor, tentativeG);
-                        pred.put(neighbor, Node);
+            for (Node neighbor : currentNode.neighbors()) {
+                this.steps++;
+                if (closedSet.contains(neighbor)) {
+                    continue;
+                }
+
+                double tentativeG = gValues.get(currentNode) + calculateDistance(currentNode, neighbor);
+                if (!openList.contains(neighbor) || tentativeG < gValues.get(neighbor)) {
+                    gValues.put(neighbor, tentativeG);
+                    fValues.put(neighbor, tentativeG + calculateHeuristic(neighbor));
+                    predecessors.put(neighbor, currentNode);
+                    if (!openList.contains(neighbor)) {
                         openList.add(neighbor);
                     }
                 }
-                soluce.add(start);
             }
-            closeList.add(Node);
         }
     }
 
-
-
-    private double distanceManhattan(Node currentNode, Node end) {
-        double x = Math.abs(end.getCoord().getX()) - Math.abs(currentNode.getCoord().getX());
-        double y = Math.abs(end.getCoord().getY()) - Math.abs(currentNode.getCoord().getY());
-        return Math.abs(x) - Math.abs(y);
+    private double calculateDistance(Node node1, Node node2) {
+        double deltaX = node1.getCoord().getX() - node2.getCoord().getX();
+        double deltaY = node1.getCoord().getY() - node2.getCoord().getY();
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
-    private void reconstructPath(PriorityQueue<Node> openQueue) {
-        soluce.add(openQueue.poll());
+
+    private double calculateHeuristic(Node node) {
+        double deltaX = node.getCoord().getX() - end.getCoord().getX();
+        double deltaY = node.getCoord().getY() - end.getCoord().getY();
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
+
+    private void reconstructPath(Map<Node, Node> predecessors) {
+        Node currentNode = end;
+        while (currentNode != null) {
+            soluce.add(currentNode);
+            currentNode = predecessors.get(currentNode);
+        }
+        Collections.reverse(soluce.getSoluce());
     }
 
     @Override
@@ -87,4 +96,5 @@ public class SolverWithAstar implements Solver {
     public int getSteps() {
         return steps;
     }
+
 }

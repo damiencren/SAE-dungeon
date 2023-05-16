@@ -9,6 +9,7 @@ import sae.graph.GraphSoluce;
 import sae.graph.Node;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Dungeon2Graph {
@@ -20,7 +21,16 @@ public class Dungeon2Graph {
         for (Room room : dungeon.getRooms()) {
             Node node = new Node(room.getName(), room.getCoords());
             roomNode.put(room, node);
+            Graph graph = new Graph();
             graph.addNode(node);
+            // Si la salle correspond à la salle A ou B du donjon, la définir comme nœud de départ ou d'arrivée
+            if (room.equals(dungeon.getRoomA())) {
+                graph.setStartNode(node);
+            }
+            if (room.equals(dungeon.getRoomB())) {
+                graph.setEndNode(node);
+            }
+            this.graph = graph;
         }
         for (Room room : dungeon.getRooms()) {
             for (Room nextRoom : room.getNextRooms().values()) {
@@ -46,19 +56,20 @@ public class Dungeon2Graph {
 
     public DungeonSoluce transform(GraphSoluce soluceGraphBFS) {
         DungeonSoluce soluceDungeon = new DungeonSoluce();
-        Node precedentN = soluceGraphBFS.getSoluce().get(0);
+        List<Node> soluceNodes = soluceGraphBFS.getSoluce(); // Utilisez getSoluce() pour obtenir la liste des nœuds de la solution
+
+        Node precedentN = soluceNodes.get(0);
         Room precedentR = mappedRoom(precedentN);
 
-
-        for (Node node : soluceGraphBFS.getSoluce()) {
+        for (Node node : soluceNodes) {
             Room r = mappedRoom(node);
             if (node.equals(precedentN)) {
                 continue; // on passe au for suivant
             }
 
-            for(Map.Entry<Direction, Room> entree : precedentR.getNextRooms().entrySet()) {
-                if(entree.getValue().equals(r)) {
-                    soluceDungeon.addDirection(entree.getKey());
+            for (Map.Entry<Direction, Room> entry : precedentR.getNextRooms().entrySet()) {
+                if (entry.getValue().equals(r)) {
+                    soluceDungeon.addDirection(entry.getKey());
                     break;
                 }
             }

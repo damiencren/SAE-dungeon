@@ -1,25 +1,13 @@
-o-A-o-o-o-o-o-o-o-o-o-o-o-o-o-B
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-|   |   |   |   |   |   |
-o-o o o o-o-o-o o o o-o-o-o-o
-
-
-
-Dans cet exemple, les nœuds sont représentés par des "o" et les arêtes par des "|" ou "-". Les nœuds A et B sont les nœuds de départ et d'arrivée respectivement.
-
-L'algorithme BFS est un algorithme de recherche non informée qui explore tous les nœuds voisins d'un nœud avant de passer aux voisins des voisins. Il s'agit donc d'une recherche en largeur dans le graphe.
-
-En utilisant cet exemple de graphe, vous pouvez exécuter l'algorithme BFS pour trouver le chemin le plus court entre A et B. L'algorithme BFS parcourt les nœuds du graphe en explorant tous les voisins d'un nœud avant de passer aux voisins suivants.
-
-L'avantage de cet exemple de graphe est qu'il illustre un scénario où le chemin le plus court entre les nœuds A et B est relativement simple et direct. L'algorithme BFS devrait être en mesure de trouver rapidement ce chemin sans avoir à explorer de nombreux autres nœuds.
-
-En testant l'algorithme BFS sur ce graphe, vous pouvez évaluer son efficacité et sa capacité à trouver le chemin le plus court dans des cas où le chemin optimal est facilement accessible sans avoir à explorer des chemins plus longs ou complexes.
+o-A-o-o-o-o-o-o
+|       | |   |
+o-o-o-o-o o-o-o
+| | |   | | |
+o-o-o-o o-o o-o
+| |   | |   |
+o-o-o-o-o-o o-o
+|     | |   |
+o-o-o-o-o-o-o
+| | | |   |
+o-o-o o-o o o-o
+|   |   |   |
+o-o-o-o-o-o-B
