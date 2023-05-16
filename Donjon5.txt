@@ -1,0 +1,25 @@
+o-A-o-o-o-o-o-o
+|       | | | |
+o-o-o-o-o-o o--o
+| | |   | | |
+o-o-o-o o-o o-o
+| | |     | | |
+o-o-o-o-o-o o-o
+|   | | | | |
+o-o-o o-o o o-o
+| | |   | | |
+o-o-o-o-o-o-B
+
+
+Le choix du dernier exemple de graphe pour tester l'algorithme A* repose sur plusieurs considérations :
+
+    Complexité : Le graphe est relativement complexe avec plusieurs chemins possibles, ce qui permet de mettre à l'épreuve l'efficacité et la précision de l'algorithme A* dans des situations plus complexes.
+
+    Connectivité : Le graphe contient des nœuds et des arêtes connectés de manière à former une structure en réseau. Cela permet de tester la capacité de l'algorithme A* à naviguer efficacement dans un réseau complexe et à trouver le chemin optimal.
+
+    Présence d'obstacles : Le graphe présente des obstacles sous la forme d'arêtes manquantes entre certains nœuds. Ces obstacles peuvent représenter des zones inaccessibles ou des chemins bloqués. Tester l'algorithme A* sur un graphe avec des obstacles permet de vérifier sa capacité à contourner les obstacles et à trouver des chemins alternatifs si nécessaire.
+
+    Fonction heuristique : Le choix d'une fonction heuristique basée sur la distance euclidienne permet d'illustrer comment l'algorithme A* peut utiliser une estimation heuristique pour guider la recherche vers le nœud d'arrivée de manière plus efficace. La distance euclidienne est une mesure simple mais couramment utilisée dans de nombreux problèmes de recherche de chemin.
+
+En combinant ces facteurs, le dernier exemple de graphe fournit un bon cadre pour tester et évaluer les performances de l'algorithme A*. Il permet de vérifier sa capacité à trouver un chemin optimal dans un graphe complexe avec des obstacles, tout en utilisant une fonction heuristique appropriée pour guider la recherche.
+
