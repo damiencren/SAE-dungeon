@@ -10,44 +10,47 @@ import sae.graph.Node;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Dungeon2Graph {
 
-    private Graph graph;
+    Map<Room, Node> roomNode = new HashMap<>();
+    public Graph graph = new Graph();
 
-    private Map<Room, Node> roomNode = new HashMap<>();
-
-    public Dungeon2Graph(Dungeon dungeon){
+    public Dungeon2Graph(Dungeon dungeon) {
         for (Room room : dungeon.getRooms()) {
             Node node = new Node(room.getName(), room.getCoords());
             roomNode.put(room, node);
             graph.addNode(node);
-            // Si la salle correspond à la salle A ou B du donjon, la définir comme nœud de départ ou d'arrivée
-            if (room.equals(dungeon.getRoomA())) {
-                graph.setStartNode(node);
-            }
-            if (room.equals(dungeon.getRoomB())) {
-                graph.setEndNode(node);
-            }
         }
         for (Room room : dungeon.getRooms()) {
-            Node node1 = graph.getNodeByName(room.getName());
-
-            for (Room connectedRoom : room.getNextRooms().values()) {
-                Node node2 = graph.getNodeByName(connectedRoom.getName());
-                graph.addEdge(node1, node2);
+            for (Room nextRoom : room.getNextRooms().values()) {
+                graph.addEdge(roomNode.get(room), roomNode.get(nextRoom));
             }
         }
     }
 
-    public DungeonSoluce transform(GraphSoluce graphSoluce) {
+    public Node mappedNode(Room room) {
+        return roomNode.get(room);
+    }
+
+    public Room mappedRoom(Node node) {
+        for(Room r: roomNode.keySet()) {
+
+            if(mappedNode(r).equals(node)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+
+    public DungeonSoluce transform(GraphSoluce soluceGraphBFS) {
         DungeonSoluce soluceDungeon = new DungeonSoluce();
-        Node precedentN = graphSoluce.getSoluce().get(0);
+        Node precedentN = soluceGraphBFS.getSoluce().get(0);
         Room precedentR = mappedRoom(precedentN);
 
 
-        for (Node node : graphSoluce.getSoluce()) {
+        for (Node node : soluceGraphBFS.getSoluce()) {
             Room r = mappedRoom(node);
             if (node.equals(precedentN)) {
                 continue; // on passe au for suivant
@@ -64,20 +67,6 @@ public class Dungeon2Graph {
         }
 
         return soluceDungeon;
-    }
-
-    public Node mappedNode(Room room) {
-        return roomNode.get(room);
-    }
-
-    public Room mappedRoom(Node node) {
-        for(Room r: roomNode.keySet()) {
-
-            if(mappedNode(r).equals(node)) {
-                return r;
-            }
-        }
-        return null;
     }
 
 }

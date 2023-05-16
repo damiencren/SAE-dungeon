@@ -1,51 +1,59 @@
 package sae.solver;
 
-import sae.graph.Graph;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 import sae.graph.GraphSoluce;
 import sae.graph.Node;
 
-import java.util.*;
-
 public class SolverWithBFS implements Solver {
-    private GraphSoluce soluce;
-    private Node start;
-    private Node end;
+    private Node nodeA;
+    private Node nodeB;
     private int steps;
-    public SolverWithBFS(Node start, Node end) {
-        this.start = start;
-        this.end = end;
+    private GraphSoluce soluce;
+
+    public SolverWithBFS(Node nodeA, Node nodeB) {
+        super();
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
     }
+
     @Override
     public void resolve() {
-        Queue<Node> queue = new LinkedList<Node>();
-        Set<Node> marques = new HashSet<Node>();
-        Map<Node, Node> pred = new HashMap<Node, Node>();
+        Queue<Node> file = new LinkedList<>();
+        Map<Node, Boolean> marquer = new HashMap<>();
+        Map<Node, Node> predecesseurs = new HashMap<>();
+        this.steps = 0;
 
-        marques.add(start);
-        queue.add(start);
+        marquer.put(nodeA, true);
+        file.add(nodeA);
 
-        while (!queue.isEmpty()) {
-            Node s = queue.poll();
-            for (Node v : s.neighbors()) {
-                if (!marques.contains(v)) {
-                    pred.put(v, s);
-                    marques.add(v);
-                    queue.add(v);
-                    if (v.equals(end)) {
-                        soluce = new GraphSoluce();
-                        Node node = end;
-                        if (pred.containsKey(node)) {
-                            while (!pred.equals(start)) {
-                                soluce.addNode(node);
-                                node = pred.get(node);
-                            }
-                            soluce.addNode(start);
-                        }
-                    }
+        while (!file.isEmpty()) {
+            Node node = file.poll();
+            if (node.equals(nodeB))
+                break;
+            for (Node voisin : node.neighbors()) {
+                this.steps++;
+                if (!marquer.containsKey(voisin)) {
+                    predecesseurs.put(voisin, node);
+                    marquer.put(voisin, true);
+                    file.add(voisin);
                 }
-                steps++;
             }
         }
+
+        this.soluce = new GraphSoluce();
+        if (marquer.containsKey(nodeB)) {
+            Node node = nodeB;
+            while (!node.equals(nodeA)) {
+                soluce.add(node);
+                node = predecesseurs.get(node);
+            }
+            soluce.add(nodeA);
+        }
+        Collections.reverse(soluce.getSoluce());
     }
 
     @Override

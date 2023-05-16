@@ -50,18 +50,18 @@ public class Scenarios {
 
 		long startingTime = System.currentTimeMillis();
 		Solver solverBFS = new SolverWithBFS(nodeA, nodeB);
-		
+
 		for (int i = 0; i < NB_ATTEMPTS; i++) {
 			solverBFS.resolve();
 		}
 		long endingTime = System.currentTimeMillis();
 		long duration = endingTime - startingTime;
-		
+
 		GraphSoluce soluceGraphBFS = solverBFS.getSoluce();
 		// System.out.println(soluceGraphBFS.getSoluce()); // verifiez votre solution ici !
 
 		DungeonSoluce soluceDonjonBFS = mapping.transform(soluceGraphBFS);
-		
+
 		System.out.println("Solution   => " + soluceDonjonBFS.getSoluce());
 		System.out.println("Temps (ms) => " + duration);
 		System.out.println("Steps      => " + solverBFS.getSteps());
@@ -72,18 +72,18 @@ public class Scenarios {
 
 		startingTime = System.currentTimeMillis();
 		Solver solverAstar = new SolverWithAstar(nodeA, nodeB);
-		
+
 		for (int i = 0; i < NB_ATTEMPTS; i++) {
 			solverAstar.resolve();
 		}
 		endingTime = System.currentTimeMillis();
 		duration = endingTime - startingTime;
-		
+
 		GraphSoluce soluceGraphAstar = solverAstar.getSoluce();
 		// System.out.println(soluceGraphBFS.getSoluce()); // verifiez votre solution ici !
-		
+
 		DungeonSoluce soluceDonjonAstar = mapping.transform(soluceGraphAstar);
-		
+
 		System.out.println("Solution   => " + soluceDonjonAstar.getSoluce());
 		System.out.println("Temps (ms) => " + duration);
 		System.out.println("Steps      => " + solverAstar.getSteps());

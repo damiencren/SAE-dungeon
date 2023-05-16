@@ -17,44 +17,57 @@ public class SolverWithAstar implements Solver {
         super();
         this.start = start;
         this.end = end;
+        this.soluce = new GraphSoluce();
     }
 
     @Override
     public void resolve() {
-        steps = 0;
-        Queue<Node> closedQueue = new LinkedList<>();
-        PriorityQueue<Node> openQueue = new PriorityQueue<>(new Comparator<Node>() {
-            @Override
-            public int compare(Node node1, Node node2) {
-                int dx = Math.abs(node1.getCoord().getX() - node1.getCoord().getY());
-                int dy = Math.abs(node2.getCoord().getX() - node2.getCoord().getY());
-                return dx - dy;
-            }
-        });
-        Map<Node, Integer> cost = new HashMap<Node, Integer>();
-        Map<Node, Integer> heuristic = new HashMap<Node, Integer>();
+        Map<Node, Double> gValues = new HashMap<>();
 
-        openQueue.add(start);
+        Comparator<Node> nodeComparator = (s1, s2) -> {
+            double deltaX = s1.getCoord().getX() - end.getCoord().getX();
+            double deltaY = s1.getCoord().getY() - end.getCoord().getY();
+            double f1 = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + gValues.getOrDefault(s1, Double.POSITIVE_INFINITY);
+            deltaX = s2.getCoord().getX() - end.getCoord().getX();
+                deltaY = s2.getCoord().getY() - end.getCoord().getY();
+            double f2 = Math.sqrt(deltaX * deltaX + deltaY * deltaY) + gValues.getOrDefault(s2, Double.POSITIVE_INFINITY);
+            return Double.compare(f1, f2);
+        };
 
-        while (!openQueue.isEmpty()) {
-            Node u = openQueue.poll();
-            if (u.getCoord().getX() == end.getCoord().getX() && u.getCoord().getY() == end.getCoord().getY()) {
-                reconstructPath(openQueue);
+        PriorityQueue<Node> openList = new PriorityQueue<>(nodeComparator);
+        Set<Node> closeList = new HashSet<>();
+        Map<Node, Node> pred = new HashMap<>();
+
+        this.steps = 0;
+        gValues.put(start, (double) 0);
+        openList.add(end);
+
+        while (!openList.isEmpty()) {
+            Node Node = openList.poll();
+            if (Node.equals(end)){
                 break;
             }
-            for (Node v : u.neighbors()) {
-                heuristic.put(v, (int) distanceManhattan(v, end));
-                cost.put(v, (int) distanceManhattan(v, start));
-                if (!closedQueue.contains(v) || !(openQueue.contains(v) && cost.get(v) < cost.get(u))) {
-                    cost.put(v, cost.get(u) + 1);
-                    heuristic.put(v, cost.get(v) + heuristic.get(v));
-                    openQueue.add(v);
+            for (Node neighbor : Node.neighbors()) {
+                this.steps++;
+                if (!closeList.contains(neighbor)) {
+                    double deltaX = Node.getCoord().getX() - neighbor.getCoord().getX();
+                    double deltaY = Node.getCoord().getY() - neighbor.getCoord().getY();
+                    double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    double tentativeG = gValues.get(Node) + distance;
+
+                    if (!openList.contains(neighbor) || tentativeG < gValues.get(neighbor)) {
+                        gValues.put(neighbor, tentativeG);
+                        pred.put(neighbor, Node);
+                        openList.add(neighbor);
+                    }
                 }
+                soluce.add(start);
             }
-            closedQueue.add(u);
+            closeList.add(Node);
         }
-        steps++;
     }
+
+
 
     private double distanceManhattan(Node currentNode, Node end) {
         double x = Math.abs(end.getCoord().getX()) - Math.abs(currentNode.getCoord().getX());
@@ -62,7 +75,7 @@ public class SolverWithAstar implements Solver {
         return Math.abs(x) - Math.abs(y);
     }
     private void reconstructPath(PriorityQueue<Node> openQueue) {
-        soluce.addNode(openQueue.poll());
+        soluce.add(openQueue.poll());
     }
 
     @Override

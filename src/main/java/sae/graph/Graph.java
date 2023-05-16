@@ -3,12 +3,11 @@ package sae.graph;
 import sae.dungeon.Room;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Graph {
-    private Node startNode;
-    private Node endNode;
-    private ArrayList<Node> nodes;
+    private List<Node> nodes = new ArrayList<>();
 
     public Graph() {
         super();
@@ -23,20 +22,8 @@ public class Graph {
         node2.addNeighbour(node1);
     }
 
-
-    public Node getNodeByName(String name) {
-        for (Node node : nodes) {
-            if (node.getName().equals(name)) {
-                return node;
-            }
-        }return null;
-    }
-
-    public void setStartNode(Node startNode) {
-        this.startNode = startNode;
-    }
-
-    public void setEndNode(Node endNode) {
-        this.endNode = endNode;
+    @Override
+    public String toString() {
+        return "Nombre de noeuds " + nodes.size();
     }
 }
