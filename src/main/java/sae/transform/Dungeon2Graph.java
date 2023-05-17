@@ -23,7 +23,7 @@ public class Dungeon2Graph {
             roomNode.put(room, node);
             Graph graph = new Graph();
             graph.addNode(node);
-            // Si la salle correspond à la salle A ou B du donjon, la définir comme nœud de départ ou d'arrivée
+
             if (room.equals(dungeon.getRoomA())) {
                 graph.setStartNode(node);
             }

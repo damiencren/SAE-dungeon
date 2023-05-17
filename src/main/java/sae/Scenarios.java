@@ -4,7 +4,6 @@ import sae.dungeon.Dungeon;
 import sae.dungeon.DungeonBuilder;
 import sae.dungeon.DungeonSoluce;
 import sae.dungeon.Room;
-
 import sae.graph.GraphSoluce;
 import sae.graph.Node;
 import sae.solver.Solver;
@@ -27,6 +26,8 @@ public class Scenarios {
 		solveDungeon(builder.createFourthDungeon());
 		solveDungeon(builder.createFifthDungeon());
 		solveDungeon(builder.createSixthDungeon());
+		solveDungeon(builder.createSeventhDungeon());
+		solveDungeon(builder.createEitghthDungeon());
 
 	}
 

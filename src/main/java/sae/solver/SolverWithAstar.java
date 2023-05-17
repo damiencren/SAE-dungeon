@@ -15,11 +15,11 @@ public class SolverWithAstar implements Solver {
     public SolverWithAstar(Node start, Node end) {
         this.start = start;
         this.end = end;
-        this.soluce = new GraphSoluce();
     }
 
     @Override
     public void resolve() {
+        this.soluce = new GraphSoluce();
         Map<Node, Double> gValues = new HashMap<>();
         Map<Node, Double> fValues = new HashMap<>();
 
